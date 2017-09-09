@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
@@ -55,6 +56,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'src/static', to: 'static' },
     ]),
+    new BundleAnalyzerPlugin(),
   ],
   module: {
     rules: [
