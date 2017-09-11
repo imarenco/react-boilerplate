@@ -1,6 +1,6 @@
 # React Boilerplate
 
-This repository contains the minimal app to get started with `react`, `redux`, `hot-reloading`, `sass`, `webpack` and some other great stuffs.
+This repository contains the minimal app to get started with `react`, `redux`, `hot-reloading`, `sass`, `webpack` and some other great stuff.
 ## Run
 ```
     npm install
