@@ -76,7 +76,7 @@ module.exports = {
               loader: 'css-loader',
               query: {
                 minimize: true,
-                modules: false,
+                modules: true,
                 sourceMap: false,
                 importLoaders: 2,
                 localIdentName: '[name]__[local]___[hash:base64:5]',
