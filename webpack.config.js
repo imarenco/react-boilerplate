@@ -20,11 +20,12 @@ module.exports = {
     ],
   },
   output: {
-    filename: 'static/bundle.js',
+    filename: 'static/[name].[hash].js',
+    chunkFilename: 'static/[name].[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new ExtractTextPlugin('static/style.css'),
+    new ExtractTextPlugin({ filename: 'static/style.css', allChunks: true }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

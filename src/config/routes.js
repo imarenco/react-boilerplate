@@ -1,14 +1,14 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import React from 'react';
+import LazyRoute from './lazy-load';
+import Login from '../components/Login';
 
-import {
-  App,
-} from '../containers';
 
 export default () => (
   <BrowserRouter>
     <div>
-      <Route path="/" component={App} />
+      <Route exact path="/" render={props => <LazyRoute {...props} component={import('../containers/App')} />} />
+      <Route exact path="/login" component={Login} />
     </div>
   </BrowserRouter>
 );

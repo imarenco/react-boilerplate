@@ -1,18 +1,23 @@
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Counter from '../components/counter';
+import Counter from '../components/Counter';
 import * as counterActions from '../actions/counter';
+
 
 class CounterApp extends PureComponent {
   render() {
     const { state, actions } = this.props;
     return (
-      <Counter
-        count={state.count}
-        {...actions}
-      />
+      <div>
+        <Counter
+          count={state.count}
+          {...actions}
+        />
+        <Link to="/login">Login</Link>
+      </div>
     );
   }
 }
