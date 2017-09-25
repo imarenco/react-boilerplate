@@ -33,11 +33,7 @@ CounterApp.propTypes = {
   }).isRequired,
 };
 
+const mapStateToProps = state => ({ state: state.counter });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(counterActions, dispatch) });
 
-export default connect(state => ({
-  state: state.counter,
-}),
-dispatch => ({
-  actions: bindActionCreators(counterActions, dispatch),
-}),
-)(CounterApp);
+export default connect(mapStateToProps, mapDispatchToProps)(CounterApp);
