@@ -9,7 +9,7 @@ module.exports = {
   entry: {
     index: ['./src/index.js'],
     vendor: [
-      'babel-polyfill',
+      '@babel/polyfill',
       'react',
       'react-dom',
       'react-redux',
