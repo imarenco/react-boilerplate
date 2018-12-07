@@ -1,15 +1,20 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const env = process.env.NODE_ENV;
+require('dotenv').config({ path: `./enviroment/${env}` });
 
 module.exports = {
+  mode: 'production',
   entry: {
-    index: ['./src/index.js'],
+    index: [
+      '@babel/polyfill', 
+      './src/index.js',
+    ],
     vendor: [
-      '@babel/polyfill',
       'react',
       'react-dom',
       'react-redux',
@@ -20,25 +25,15 @@ module.exports = {
     ],
   },
   output: {
-    filename: 'static/[name].[hash].js',
-    chunkFilename: 'static/[name].[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
+    filename: 'static/[name].[hash].js',
+    publicPath: process.env.BASE_PATH,
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: { chunks: 'all', name: 'vendor' },
   },
   plugins: [
-    new ExtractTextPlugin({ filename: 'static/style.css', allChunks: true }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'static/vendor.js',
-      minChunks: Infinity,
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      comments: false,
-      sourceMap: false,
-    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
@@ -48,16 +43,20 @@ module.exports = {
         collapseWhitespace: true,
         collapseInlineTagWhitespace: true,
       },
+      VERSION: JSON.stringify(process.env.npm_package_version),
     }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
       },
+      API_URL: JSON.stringify(process.env.API_URL),
     }),
     new CopyWebpackPlugin([
       { from: 'src/static', to: 'static' },
     ]),
-    new BundleAnalyzerPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'static/style.[hash].css',
+    }),
   ],
   module: {
     rules: [
@@ -68,41 +67,12 @@ module.exports = {
         include: path.join(__dirname, 'src'),
       },
       {
-        test: /\.scss$/,
-        exclude: ['/node_modules/', path.join(__dirname, 'src/styles')],
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              query: {
-                minimize: true,
-                modules: true,
-                sourceMap: false,
-                importLoaders: 2,
-                localIdentName: '[name]__[local]___[hash:base64:5]',
-              },
-            },
-            'sass-loader',
-          ],
-        }),
-      },
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        include: path.join(__dirname, 'src/styles'),
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              query: {
-                minimize: true,
-              },
-            },
-            'sass-loader',
-          ],
-        }),
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
       },
     ],
   },
