@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './counter.scss';
+
 
 const Counter = ({ count, increment, decrement, incrementAsync }) => (
-  <div className={style.counter}>
+  <div>
     Clicked: {count} times
     <button onClick={increment}>
       +

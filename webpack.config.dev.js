@@ -1,34 +1,41 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+dotenv.config({path: `./enviroment/${process.env.NODE_ENV}`});
+
 module.exports = {
+  mode: 'development',
   entry: [
     '@babel/polyfill',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
+    'webpack-dev-server/client?http://localhost:4200',
     'webpack/hot/only-dev-server',
     './src/index.js',
   ],
   output: {
     filename: 'static/bundle.js',
-    publicPath: '/',
   },
   devServer: {
     hot: true,
     historyApiFallback: true,
     contentBase: path.join(__dirname, 'src'),
+    port: 4200,
+    open: true,
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new ExtractTextPlugin('static/style.css'),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
+      VERSION: JSON.stringify(process.env.npm_package_version),
+    }),
+    new webpack.DefinePlugin({
+      API_URL: JSON.stringify(process.env.API_URL),
     }),
   ],
+  optimization: {
+    namedModules: true,
+  },
   module: {
     rules: [
       {
@@ -38,38 +45,13 @@ module.exports = {
         include: path.join(__dirname, 'src'),
       },
       {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        include: path.join(__dirname, 'src/styles'),
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-            },
-            'sass-loader',
-          ],
-        }),
-      },
-      {
-        test: /\.scss$/,
-        exclude: ['/node_modules/', path.join(__dirname, 'src/styles')],
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              query: {
-                modules: true,
-                sourceMap: true,
-                importLoaders: 2,
-                localIdentName: '[name]__[local]___[hash:base64:5]',
-              },
-            },
-            'sass-loader',
-          ],
-        }),
-      },
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
+      }
     ],
   },
 };
