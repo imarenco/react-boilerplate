@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Counter from '../components/Counter';
-import * as counterActions from '../actions/counter';
+import Counter from '../../../components/Counter';
+import * as counterActions from '../../../domain/counter/actions';
 
 
-class CounterApp extends PureComponent {
+class CounterDetail extends PureComponent {
   render() {
     const { state, actions } = this.props;
     return (
@@ -22,7 +22,7 @@ class CounterApp extends PureComponent {
   }
 }
 
-CounterApp.propTypes = {
+CounterDetail.propTypes = {
   state: PropTypes.shape({
     count: PropTypes.number.isRequired,
   }).isRequired,
@@ -36,4 +36,4 @@ CounterApp.propTypes = {
 const mapStateToProps = state => ({ state: state.counter });
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(counterActions, dispatch) });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CounterApp);
+export default connect(mapStateToProps, mapDispatchToProps)(CounterDetail);

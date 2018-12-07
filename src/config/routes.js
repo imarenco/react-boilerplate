@@ -1,14 +1,13 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import React from 'react';
-import Login from '../components/Login';
-import Counter from '../containers/App';
-
+import { DetailCounterContainer } from '../pages/Counter';
+import { SignContainer } from '../pages/Login';
 
 export default () => (
   <BrowserRouter>
     <div>    
-      <Route exact path="/" component={Counter} />
-      <Route exact path="/login" component={Login} />
+      <Route exact path="/" component={DetailCounterContainer} />
+      <Route exact path="/login" component={SignContainer} />
     </div>
   </BrowserRouter>
 );
